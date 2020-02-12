@@ -16,6 +16,9 @@ import collections
 import numpy
 import random
 
+import json, csv
+from scipy.stats import spearmanr
+
 parser = argparse.ArgumentParser(description='PyTorch Wikitext-2 RNN/LSTM Language Model')
 parser.add_argument('--data', type=str, default='./data/wikitext-2',
                     help='location of the data corpus')
@@ -191,7 +194,7 @@ def export_onnx(path, batch_size, seq_len):
 def corrfunction(embeds):
     cos = nn.CosineSimilarity(dim=0)
     wordindex = corpus.dictionary.word2idx
-    with open('combined.csv') as csvfile:
+    with open('./wordsim353/combined.csv') as csvfile:
         filein = csv.reader(csvfile)
         index = 0
         humansim = []
@@ -260,7 +263,7 @@ print("Spearman coefficient")
 #cosine similarity
 embeds = model.embeddings.weight.data
 corr = corrfunction(embeds)
-print('Spearman correlation between cosine similarity of input embedding pairs and human similarity scores: ', corr)
+print(corr)
 #word_embeddings = model.input_embeddings()
 #model.save_embedding()
 #print("embedding", word_embeddings)
@@ -270,8 +273,8 @@ print('Spearman correlation between cosine similarity of input embedding pairs a
 #print(word_embeddings)
 #print(type(data.scorefunction(word_embeddings)))
 #print(data.scorefunction(word_embeddings)) 
-print(type(sp1))
-print(float(sp1))
+#print(type(sp1))
+#print(float(sp1))
 #if len(args.onnx_export) > 0:
     # Export the model in ONNX format.
 #    export_onnx(args.onnx_export, batch_size=1, seq_len=args.bptt)
