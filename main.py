@@ -264,17 +264,4 @@ print("Spearman coefficient")
 embeds = model.embeddings.weight.data
 cor = scorefunction(embeds)
 print(cor)
-#word_embeddings = model.input_embeddings()
-#model.save_embedding()
-#print("embedding", word_embeddings)
-#sp1  = data.scorefunction(corpus.dictionary, word_embeddings)
-#print('sp=%1.3f',sp1)
-#print(type(word_embeddings))
-#print(word_embeddings)
-#print(type(data.scorefunction(word_embeddings)))
-#print(data.scorefunction(word_embeddings)) 
-#print(type(sp1))
-#print(float(sp1))
-#if len(args.onnx_export) > 0:
-    # Export the model in ONNX format.
-#    export_onnx(args.onnx_export, batch_size=1, seq_len=args.bptt)
+
