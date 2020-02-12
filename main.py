@@ -107,7 +107,7 @@ test_data = batchify(corpus.test, eval_batch_size)
 ntokens = len(corpus.dictionary)
 criterion = nn.CrossEntropyLoss()
 model = model.FNNModel(ntokens, args.emsize, args.nhid, args.tied).to(device)
-optimizer = torch.optim.Adam(model.parameters(), lr=20)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
 ###############################################################################
 # Training code
 ###############################################################################
