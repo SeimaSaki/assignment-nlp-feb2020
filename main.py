@@ -107,7 +107,7 @@ test_data = batchify(corpus.test, eval_batch_size)
 ntokens = len(corpus.dictionary)
 criterion = nn.CrossEntropyLoss()
 model = model.FNNModel(ntokens, args.emsize, args.nhid, args.tied).to(device)
-optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+optimizer = torch.optim.Adam(model.parameters(), lr=20)
 ###############################################################################
 # Training code
 ###############################################################################
@@ -191,7 +191,7 @@ def export_onnx(path, batch_size, seq_len):
     hidden = model.init_hidden(batch_size)
     torch.onnx.export(model, (dummy_input, hidden), path)
 
-def corrfunction(embeds):
+def scorefunction(embeds):
     cos = nn.CosineSimilarity(dim=0)
     wordindex = corpus.dictionary.word2idx
     with open('./wordsim353/combined.csv') as csvfile:
@@ -262,8 +262,8 @@ print('=' * 89)
 print("Spearman coefficient")
 #cosine similarity
 embeds = model.embeddings.weight.data
-corr = corrfunction(embeds)
-print(corr)
+cor = scorefunction(embeds)
+print(cor)
 #word_embeddings = model.input_embeddings()
 #model.save_embedding()
 #print("embedding", word_embeddings)
