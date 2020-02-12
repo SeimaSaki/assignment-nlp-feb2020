@@ -188,6 +188,31 @@ def export_onnx(path, batch_size, seq_len):
     hidden = model.init_hidden(batch_size)
     torch.onnx.export(model, (dummy_input, hidden), path)
 
+def corrfunction(embeds):
+    cos = nn.CosineSimilarity(dim=0)
+    wordindex = corpus.dictionary.word2idx
+    with open('combined.csv') as csvfile:
+        filein = csv.reader(csvfile)
+        index = 0
+        humansim = []
+        consim = []
+        for eles in filein:
+            if index==0:
+                index = 1
+                continue
+            if (eles[0] not in wordindex) or (eles[1] not in wordindex):
+                continue
+            word1 = int(wordindex[eles[0]])
+            word2 = int(wordindex[eles[1]])
+            humansim.append(float(eles[2]))
+                                
+            value1 = embeds[word1]
+            value2 = embeds[word2]
+            index = index + 1
+            score = cos(value1, value2)
+            consim.append(score)
+    cor1, pvalue1 = spearmanr(humansim, consim)
+    return cor1
 
 # Loop over epochs.
 lr = args.lr
@@ -232,10 +257,14 @@ print('| End of training | test loss {:5.2f} | test ppl {:8.2f}'.format(
 print('=' * 89)
 
 print("Spearman coefficient")
-word_embeddings = model.input_embeddings()
+#cosine similarity
+embeds = model.embeddings.weight.data
+corr = corrfunction(embeds)
+print('Spearman correlation between cosine similarity of input embedding pairs and human similarity scores: ', corr)
+#word_embeddings = model.input_embeddings()
 #model.save_embedding()
-print("embedding", word_embeddings)
-sp1  = data.scorefunction(corpus.dictionary, word_embeddings)
+#print("embedding", word_embeddings)
+#sp1  = data.scorefunction(corpus.dictionary, word_embeddings)
 #print('sp=%1.3f',sp1)
 #print(type(word_embeddings))
 #print(word_embeddings)
