@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import numpy
 
 class FNNModel(nn.Module):
     
@@ -35,6 +36,16 @@ class FNNModel(nn.Module):
         self.linear1.weight.data.uniform_(-initrange, initrange)
         self.linear2.bias.data.zero_()
         self.linear2.weight.data.uniform_(-initrange, initrange)
+
+    def input_embeddings(self):
+        return self.embeddings.weight.data.cpu().numpy()
+    #def save_embedding(self, file_name='./vocab.txt', id2word):
+    #    embeds = self.u_embeddings.weight.data
+    #    fo = open(file_name, 'w')
+    #    for idx in range(len(embeds)):
+    #        word = id2word(idx)
+    #        embed = ' '.join(embeds[idx])
+    #        fo.write(word+' '+embed+'\n')
 
 class RNNModel(nn.Module):
     """Container module with an encoder, a recurrent module, and a decoder."""
